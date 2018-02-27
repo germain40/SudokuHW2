@@ -90,6 +90,22 @@ public class BoardPanel extends JPanel {
 
         // WRITE YOUR CODE HERE ...
         // i.e., draw grid and squares.
+        
+        //Color c = Color.black;
+        //g.setColor(c);
+        //int width = getWidth();
+        //int height = getHeight();
+        //super.paintComponent(g);
+
+        // draw the rows
+        //int rowHt = height / (board.size);
+        //for (int i = 0; i < board.size; i++)
+          //g.drawLine(0, i * rowHt, width, i * rowHt);
+
+        // draw the columns
+        //int rowWid = width / (board.size);
+        //for (int i = 0; i < board.size; i++)
+          //g.drawLine(i * rowWid, 0, i * rowWid, height);
     }
 
 }
