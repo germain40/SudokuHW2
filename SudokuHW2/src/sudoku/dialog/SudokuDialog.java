@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import sudoku.model.Board;
@@ -76,7 +77,7 @@ public class SudokuDialog extends JFrame {
      */
     private void numberClicked(int number) {
         // WRITE YOUR CODE HERE ...
-        //
+        boardPanel.repaint(number);
         showMessage("Number clicked: " + number);
     }
     
@@ -89,7 +90,28 @@ public class SudokuDialog extends JFrame {
      */
     private void newClicked(int size) {
         // WRITE YOUR CODE HERE ...
-        //
+    	if(!board.checkSolved()) {
+    		int selectedOption = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+	    	if(selectedOption == JOptionPane.YES_OPTION) {
+		        this.board = new Board(size);
+		        this.boardPanel = new BoardPanel(this.board, this::boardClicked);
+		        configureUI();
+		        //setLocationRelativeTo(null);
+		        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		        setVisible(true);
+		        //setResizable(false);
+    		}
+    	}
+    	else {
+    		this.board = new Board(size);
+	        this.boardPanel = new BoardPanel(this.board, this::boardClicked);
+	        configureUI();
+	        //setLocationRelativeTo(null);
+	        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	        setVisible(true);
+	        //setResizable(false);
+    	}
+        
         showMessage("New clicked: " + size);
     }
 
