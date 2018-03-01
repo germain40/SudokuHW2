@@ -93,18 +93,14 @@ public class BoardPanel extends JPanel {
         // i.e., draw grid and squares.
         
         Graphics2D g2 = (Graphics2D) g;
+        
         Color c = Color.black;
         g2.setColor(c);
 
-        // draw the rows
-        int rowHt = squareSize;
-        for (int i = 0; i < board.size +1; i++)
-          g2.drawLine(0, i * rowHt, dim.width, i * rowHt); // (x1, y1, x2, y2)
+        for (int i = 0; i < board.size; i++)
+        	for (int j = 0; j < board.size; j++)
+        		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize ); //(x, y, width, height)
 
-        // draw the columns
-        int rowWid = squareSize;
-        for (int i = 0; i < board.size +1; i++)
-          g2.drawLine(i * rowWid, 0, i * rowWid, dim.height);
     }
 
 }
