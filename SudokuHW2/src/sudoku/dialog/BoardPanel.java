@@ -83,13 +83,17 @@ public class BoardPanel extends JPanel {
         Dimension dim = getSize();
         squareSize = Math.min(dim.width, dim.height) / board.size;
 
-        // draw background
+        // draw backround
         final Color oldColor = g.getColor();
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
 
         // WRITE YOUR CODE HERE ...
         // i.e., draw grid and squares.
+    }
+    
+    public void highlight(Graphics g, int x, int y) {
+    	super.paint(g);
     }
 
 }

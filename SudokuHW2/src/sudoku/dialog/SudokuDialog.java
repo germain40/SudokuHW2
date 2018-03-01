@@ -66,7 +66,7 @@ public class SudokuDialog extends JFrame {
      */
     private void boardClicked(int x, int y) {
         // WRITE YOUR CODE HERE ...
-        //
+    	//boardPanel.highlight(x,y);
     	showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
     }
     
