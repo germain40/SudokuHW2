@@ -119,7 +119,7 @@ public class BoardPanel extends JPanel {
         
         for (int i = 0; i < board.size; i++) {
         	for (int j = 0; j < board.size; j++) {
-        		g.drawString(Integer.toString(b[i][j]), i * squareSize, j * squareSize);
+        		g.drawString(Integer.toString(b[i][j]), (i * squareSize) + (squareSize / 2), (j * squareSize) + (squareSize / 2));
         	}
         }
     }
