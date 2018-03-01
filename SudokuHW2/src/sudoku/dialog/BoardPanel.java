@@ -1,10 +1,8 @@
 package sudoku.dialog;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -90,12 +88,10 @@ public class BoardPanel extends JPanel {
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
 
-        // WRITE YOUR CODE HERE ...
         // i.e., draw grid and squares.
         
         Color c = Color.black;
         g.setColor(c);
-        Graphics2D g2 = (Graphics2D) g;
         int sqrt = (int) Math.sqrt(board.size);
 
         for (int i = 0; i < board.size; i++) {
