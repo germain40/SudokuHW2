@@ -3,6 +3,7 @@ package sudoku.dialog;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -90,6 +91,15 @@ public class BoardPanel extends JPanel {
 
         // WRITE YOUR CODE HERE ...
         // i.e., draw grid and squares.
+        
+        Graphics2D g2 = (Graphics2D) g;
+        
+        Color c = Color.black;
+        g2.setColor(c);
+
+        for (int i = 0; i < board.size; i++)
+        	for (int j = 0; j < board.size; j++)
+        		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize); //(x, y, width, height)
     }
     
     public void highlight(Graphics g, int x, int y) {
