@@ -101,9 +101,5 @@ public class BoardPanel extends JPanel {
         	for (int j = 0; j < board.size; j++)
         		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize); //(x, y, width, height)
     }
-    
-    public void highlight(Graphics g, int x, int y) {
-    	super.paint(g);
-    }
 
 }
