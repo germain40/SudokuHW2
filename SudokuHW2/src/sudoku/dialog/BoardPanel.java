@@ -3,7 +3,6 @@ package sudoku.dialog;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -89,17 +88,35 @@ public class BoardPanel extends JPanel {
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
 
-        // WRITE YOUR CODE HERE ...
         // i.e., draw grid and squares.
         
-        Graphics2D g2 = (Graphics2D) g;
-        
         Color c = Color.black;
-        g2.setColor(c);
+        g.setColor(c);
+        int sqrt = (int) Math.sqrt(board.size);
 
-        for (int i = 0; i < board.size; i++)
-        	for (int j = 0; j < board.size; j++)
+        for (int i = 0; i < board.size; i++) {
+        	for (int j = 0; j < board.size; j++) {
         		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize); //(x, y, width, height)
+        	}
+        }
+        for (int i = 0; i <= squareSize * board.size; i += squareSize) {
+        	g.drawLine(0, i, squareSize * board.size, i);
+        	g.drawLine(i, 0, i, squareSize * board.size);
+        	if ((i/squareSize) % sqrt == 0) {
+        		g.drawLine(0, i+1, squareSize * board.size, i+1);
+        		g.drawLine(i+1, 0, i+1, squareSize * board.size);
+        		g.drawLine(0, i-1, squareSize * board.size, i-1);
+        		g.drawLine(i-1, 0, i-1, squareSize * board.size);
+        	}
+        }
+        
+        // draws numbers 
+        int [][] b = Board.getBoard();
+        
+        for (int i = 0; i < board.size; i++) {
+        	for (int j = 0; j < board.size; j++) {
+        		g.drawString(Integer.toString(b[i][j]), (i * squareSize) + (squareSize / 2), (j * squareSize) + (squareSize / 2));
+        	}
+        }
     }
-
 }
