@@ -99,8 +99,7 @@ public class BoardPanel extends JPanel {
 
         for (int i = 0; i < board.size; i++)
         	for (int j = 0; j < board.size; j++)
-        		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize ); //(x, y, width, height)
-
+        		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize); //(x, y, width, height)
     }
 
 }
