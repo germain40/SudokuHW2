@@ -70,6 +70,10 @@ public class SudokuDialog extends JFrame {
         // WRITE YOUR CODE HERE ...
     	val[0] = x;
     	val[1] = y;
+    	if(val[0] != -1 && val[1] != -1) {
+    		boardPanel.highlight(x, y);
+    	}
+    	boardPanel.repaint();
     	showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
     }
     
@@ -79,13 +83,13 @@ public class SudokuDialog extends JFrame {
      */
     private void numberClicked(int number) {
         // WRITE YOUR CODE HERE ...
-    	if (val[0] != -1 && val[1] != -1) {
+    	if(val[0] != -1 && val[1] != -1) {
     		val[2] = number;
     		board.checkBoard(val[2], val[0], val[1]);
-    		boardPanel.repaint(number);
+    		boardPanel.repaint();
             showMessage("Number clicked: " + number);
-            
-    	} else {
+    	}
+    	else {
     		//playsound
     	}
     }
@@ -103,22 +107,14 @@ public class SudokuDialog extends JFrame {
     		int selectedOption = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
 	    	if(selectedOption == JOptionPane.YES_OPTION) {
 		        this.board = new Board(size);
-		        this.boardPanel = new BoardPanel(this.board, this::boardClicked);
-		        configureUI();
-		        //setLocationRelativeTo(null);
-		        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		        setVisible(true);
-		        //setResizable(false);
+		        this.boardPanel.setBoard(board);
+		        boardPanel.repaint();
     		}
     	}
     	else {
     		this.board = new Board(size);
-	        this.boardPanel = new BoardPanel(this.board, this::boardClicked);
-	        configureUI();
-	        //setLocationRelativeTo(null);
-	        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-	        setVisible(true);
-	        //setResizable(false);
+    		this.boardPanel.setBoard(board);
+    		boardPanel.repaint();
     	}
         
         showMessage("New clicked: " + size);

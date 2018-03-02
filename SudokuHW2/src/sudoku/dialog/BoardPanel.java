@@ -3,6 +3,7 @@ package sudoku.dialog;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -58,6 +59,12 @@ public class BoardPanel extends JPanel {
     	this.board = board;
     }
     
+    int h[] = new int[2];
+    public void highlight(int x, int y) {
+    	h[0] = x;
+    	h[1] = y;
+    }
+    
     /**
      * Given a screen coordinate, return the indexes of the corresponding square
      * or -1 if there is no square.
@@ -87,9 +94,14 @@ public class BoardPanel extends JPanel {
         final Color oldColor = g.getColor();
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
+        
+        //Highlights specific square
+        if(h[0] != -1 && h[1] != -1) {
+        	g.setColor(Color.MAGENTA);
+        	g.fillRect(h[0]*squareSize, h[1]*squareSize, squareSize, squareSize);
+        }
 
         // i.e., draw grid and squares.
-        
         Color c = Color.black;
         g.setColor(c);
         int sqrt = (int) Math.sqrt(board.size);
