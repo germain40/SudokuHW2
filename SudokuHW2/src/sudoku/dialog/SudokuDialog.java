@@ -67,12 +67,9 @@ public class SudokuDialog extends JFrame {
      */
     int[] val = {-1, -1, -1};
     private void boardClicked(int x, int y) {
-        // WRITE YOUR CODE HERE ...
+    	boardPanel.highlight(x, y);
     	val[0] = x;
     	val[1] = y;
-    	if(val[0] != -1 && val[1] != -1) {
-    		boardPanel.highlight(x, y);
-    	}
     	boardPanel.repaint();
     	showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
     }
@@ -91,6 +88,15 @@ public class SudokuDialog extends JFrame {
     	}
     	else {
     		//playsound
+    	}
+    	if(board.checkSolved()) {
+    		int selectedOption = JOptionPane.showConfirmDialog(msgBar, "Congratulations!! Start new game?", "Solved!", JOptionPane.YES_NO_OPTION);
+    		if(selectedOption == JOptionPane.YES_OPTION) {
+		        newClicked(board.size);
+    		}
+    		else {
+    			System.exit(0);
+    		}
     	}
     }
     
