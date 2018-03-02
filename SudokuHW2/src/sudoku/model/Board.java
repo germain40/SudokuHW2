@@ -12,13 +12,13 @@ public class Board {
         this.size = size;
         b = new int[size][size];
     }
-
+    
     /** Return the size of this board. */
     public int size() {
     	return size;
     }
 
-	public int[][] checkBoard(int n, int x, int y) { 	// updates board and checks valid entry
+	public String checkBoard(int n, int x, int y) { 	// updates board and checks valid entry
 		int sqrt = (int) Math.sqrt(b.length);
 		int subx = x / sqrt;
 		int suby = y / sqrt;
@@ -30,32 +30,29 @@ public class Board {
 				if (y >= 0 && y <= b.length) {
 					
 					for (int i = 0; i < b.length; i++) {			// checks rules 
-						if (b[x][i] == n) {	 					// rows
-							System.out.println("Invalid input... Number in same row");
-							return b;
+						if (b[x][i] == n) {	 					// column
+							return  "Invalid Input... Number in same column";
 						}
 						
-						if (b[i][y] == n) {						// columns
-							System.out.println("Invalid Input... Number in same column");
-							return b;
+						if (b[i][y] == n) {						// rows
+							return "Invalid input... Number in same row";
 						}
 					}
 					
 					for (int i = subx * sqrt; i < boundx; i++) {			// subgrids
 						for (int j = suby * sqrt; j < boundy; j++) {
 							if (b[i][j] == n) {
-								System.out.println("Invalid Input.. Number in same Sub-Grid");
-								return b;
+								return "Invalid Input.. Number in same Sub-Grid";
 							}
 						}
 					}
 					
 					b[x][y] = n;
-					//System.out.println("Updated!");
+					return "Updated!";
 				}
 			}
 		}
-		return b;
+		return "";
 	}
 	
 	public boolean checkSolved() {

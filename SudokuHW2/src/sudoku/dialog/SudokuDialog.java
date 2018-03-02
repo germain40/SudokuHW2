@@ -65,9 +65,11 @@ public class SudokuDialog extends JFrame {
      * @param x 0-based row index of the clicked square.
      * @param y 0-based column index of the clicked square.
      */
+    int[] val = {-1, -1, -1};
     private void boardClicked(int x, int y) {
         // WRITE YOUR CODE HERE ...
-    	//boardPanel.highlight(x,y);
+    	val[0] = x;
+    	val[1] = y;
     	showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
     }
     
@@ -77,8 +79,15 @@ public class SudokuDialog extends JFrame {
      */
     private void numberClicked(int number) {
         // WRITE YOUR CODE HERE ...
-        boardPanel.repaint(number);
-        showMessage("Number clicked: " + number);
+    	if (val[0] != -1 && val[1] != -1) {
+    		val[2] = number;
+    		board.checkBoard(val[2], val[0], val[1]);
+    		boardPanel.repaint(number);
+            showMessage("Number clicked: " + number);
+            
+    	} else {
+    		//playsound
+    	}
     }
     
     /**
