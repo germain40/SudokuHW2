@@ -59,7 +59,7 @@ public class BoardPanel extends JPanel {
     	this.board = board;
     }
     
-    int h[] = new int[2];
+    int h[] = {-1, -1};
     public void highlight(int x, int y) {
     	h[0] = x;
     	h[1] = y;
@@ -99,6 +99,8 @@ public class BoardPanel extends JPanel {
         if(h[0] != -1 && h[1] != -1) {
         	g.setColor(Color.MAGENTA);
         	g.fillRect(h[0]*squareSize, h[1]*squareSize, squareSize, squareSize);
+        	h[0] = -1;
+        	h[1] = -1;
         }
 
         // i.e., draw grid and squares.

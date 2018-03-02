@@ -90,24 +90,36 @@ public class SudokuDialog extends JFrame {
     	if(val[0] != -1 && val[1] != -1) {
     		val[2] = number;
     		board.checkBoard(val[2], val[0], val[1]);
-    		boardPanel.repaint();
-            showMessage("Number clicked: " + number);
+            val[0] = -1;
+            val[1] = -1;
+            boardPanel.repaint();
+        	showMessage("Number clicked: " + number);
     	}
     	else {
-    		 try {           
-    	          File soundFile = new File("");
-    	          AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);              
-    	         Clip clip = AudioSystem.getClip();
-    	         clip.open(audioIn);
-    	         clip.start();
-    	      } catch (UnsupportedAudioFileException e) {
-    	         e.printStackTrace();
-    	      } catch (IOException e) {
-    	         e.printStackTrace();
-    	      } catch (LineUnavailableException e) {
-    	         e.printStackTrace();
-    	      }
+    		/**
+    		 * plays sound
+    		 */
+    		 try { 
+    			 AudioInputStream s = AudioSystem.getAudioInputStream(new File("ahem_x.wav"));
+    			 Clip c = AudioSystem.getClip();
+    			 
+    			 c.open(s);
+    			 c.start();
+    			 
+    			 while(!c.isRunning())
+    				 Thread.sleep(10);
+    			 while (c.isRunning())
+    				 Thread.sleep(10);
+    			 
+    			 c.close();
+    			 
+    		 } catch (Exception e) {
+    			 e.printStackTrace();
+    		 }
     	   }
+    	/**
+    	 * checks board
+    	 */
     	if(board.checkSolved()) {
     		int selectedOption = JOptionPane.showConfirmDialog(msgBar, "Congratulations!! Start new game?", "Solved!", JOptionPane.YES_NO_OPTION);
     		if(selectedOption == JOptionPane.YES_OPTION) {
@@ -127,7 +139,6 @@ public class SudokuDialog extends JFrame {
      * @param size Requested puzzle size, either 4 or 9.
      */
     private void newClicked(int size) {
-        // WRITE YOUR CODE HERE ...
     	if(!board.checkSolved()) {
     		int selectedOption = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
 	    	if(selectedOption == JOptionPane.YES_OPTION) {
@@ -186,7 +197,9 @@ public class SudokuDialog extends JFrame {
     	}
     	newButtons.setAlignmentX(LEFT_ALIGNMENT);
         
-    	// buttons labeled 1, 2, ..., 9, and X.
+    	/** buttons labeled 1, 2, ..., 9, and X.
+    	 * 
+    	 */
     	JPanel numberButtons = new JPanel(new FlowLayout());
     	int maxNumber = board.size() + 1;
     	for (int i = 1; i <= maxNumber; i++) {

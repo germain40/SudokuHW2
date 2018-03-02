@@ -25,6 +25,10 @@ public class Board {
 		int boundx = (subx +1) * sqrt;
 		int boundy = (suby +1) * sqrt;
 		
+		if (n == 0) {
+			b[x][y] = 0;
+			return b;
+		}
 		if (n > 0 && n <= b.length) {
 			if (x >= 0 && x <= b.length) {
 				if (y >= 0 && y <= b.length) {
