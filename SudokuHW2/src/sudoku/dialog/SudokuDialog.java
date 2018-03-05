@@ -86,7 +86,6 @@ public class SudokuDialog extends JFrame {
      * @param number Clicked number (1-9), or 0 for "X".
      */
     private void numberClicked(int number) {
-        // WRITE YOUR CODE HERE ...
     	if(val[0] != -1 && val[1] != -1) {
     		val[2] = number;
     		board.checkBoard(val[2], val[0], val[1]);
