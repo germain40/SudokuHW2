@@ -5,14 +5,22 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import sudoku.model.Board;
@@ -64,9 +72,12 @@ public class SudokuDialog extends JFrame {
      * @param x 0-based row index of the clicked square.
      * @param y 0-based column index of the clicked square.
      */
+    int[] val = {-1, -1, -1};
     private void boardClicked(int x, int y) {
-        // WRITE YOUR CODE HERE ...
-        //
+    	boardPanel.highlight(x, y);
+    	val[0] = x;
+    	val[1] = y;
+    	boardPanel.repaint();
     	showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
     }
     
@@ -75,9 +86,48 @@ public class SudokuDialog extends JFrame {
      * @param number Clicked number (1-9), or 0 for "X".
      */
     private void numberClicked(int number) {
-        // WRITE YOUR CODE HERE ...
-        //
-        showMessage("Number clicked: " + number);
+    	if(val[0] != -1 && val[1] != -1) {
+    		val[2] = number;
+    		board.checkBoard(val[2], val[0], val[1]);
+            val[0] = -1;
+            val[1] = -1;
+            boardPanel.repaint();
+        	showMessage("Number clicked: " + number);
+    	}
+    	else {
+    		/**
+    		 * plays sound
+    		 */
+    		 try { 
+    			 AudioInputStream s = AudioSystem.getAudioInputStream(new File("ahem_x.wav"));
+    			 Clip c = AudioSystem.getClip();
+    			 
+    			 c.open(s);
+    			 c.start();
+    			 
+    			 while(!c.isRunning())
+    				 Thread.sleep(10);
+    			 while (c.isRunning())
+    				 Thread.sleep(10);
+    			 
+    			 c.close();
+    			 
+    		 } catch (Exception e) {
+    			 e.printStackTrace();
+    		 }
+    	   }
+    	/**
+    	 * checks board
+    	 */
+    	if(board.checkSolved()) {
+    		int selectedOption = JOptionPane.showConfirmDialog(msgBar, "Congratulations!! Start new game?", "Solved!", JOptionPane.YES_NO_OPTION);
+    		if(selectedOption == JOptionPane.YES_OPTION) {
+		        newClicked(board.size);
+    		}
+    		else {
+    			System.exit(0);
+    		}
+    	}
     }
     
     /**
@@ -88,8 +138,20 @@ public class SudokuDialog extends JFrame {
      * @param size Requested puzzle size, either 4 or 9.
      */
     private void newClicked(int size) {
-        // WRITE YOUR CODE HERE ...
-        //
+    	if(!board.checkSolved()) {
+    		int selectedOption = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+	    	if(selectedOption == JOptionPane.YES_OPTION) {
+		        this.board = new Board(size);
+		        this.boardPanel.setBoard(board);
+		        boardPanel.repaint();
+    		}
+    	}
+    	else {
+    		this.board = new Board(size);
+    		this.boardPanel.setBoard(board);
+    		boardPanel.repaint();
+    	}
+        
         showMessage("New clicked: " + size);
     }
 
@@ -134,7 +196,9 @@ public class SudokuDialog extends JFrame {
     	}
     	newButtons.setAlignmentX(LEFT_ALIGNMENT);
         
-    	// buttons labeled 1, 2, ..., 9, and X.
+    	/** buttons labeled 1, 2, ..., 9, and X.
+    	 * 
+    	 */
     	JPanel numberButtons = new JPanel(new FlowLayout());
     	int maxNumber = board.size() + 1;
     	for (int i = 1; i <= maxNumber; i++) {

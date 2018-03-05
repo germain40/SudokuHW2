@@ -3,6 +3,7 @@ package sudoku.dialog;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -57,6 +58,12 @@ public class BoardPanel extends JPanel {
     public void setBoard(Board board) {
     	this.board = board;
     }
+    /** for highlight method needs cordinates */
+    int h[] = {-1, -1};
+    public void highlight(int x, int y) {
+    	h[0] = x;
+    	h[1] = y;
+    }
     
     /**
      * Given a screen coordinate, return the indexes of the corresponding square
@@ -79,17 +86,51 @@ public class BoardPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g); 
 
-        // determine the square size
+        /** square size */
         Dimension dim = getSize();
         squareSize = Math.min(dim.width, dim.height) / board.size;
 
-        // draw background
+        /** background color */
         final Color oldColor = g.getColor();
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
+        
+        /** highlights square */
+        if(h[0] != -1 && h[1] != -1) {
+        	g.setColor(Color.MAGENTA);
+        	g.fillRect(h[0]*squareSize, h[1]*squareSize, squareSize, squareSize);
+        	h[0] = -1;
+        	h[1] = -1;
+        }
 
-        // WRITE YOUR CODE HERE ...
-        // i.e., draw grid and squares.
+        /** draw squares */
+        Color c = Color.black;
+        g.setColor(c);
+        int sqrt = (int) Math.sqrt(board.size);
+
+        for (int i = 0; i < board.size; i++) {
+        	for (int j = 0; j < board.size; j++) {
+        		g.drawRect(i * squareSize, j * squareSize, squareSize, squareSize); //(x, y, width, height)
+        	}
+        }
+        for (int i = 0; i <= squareSize * board.size; i += squareSize) {
+        	g.drawLine(0, i, squareSize * board.size, i);
+        	g.drawLine(i, 0, i, squareSize * board.size);
+        	if ((i/squareSize) % sqrt == 0) {
+        		g.drawLine(0, i+1, squareSize * board.size, i+1);
+        		g.drawLine(i+1, 0, i+1, squareSize * board.size);
+        		g.drawLine(0, i-1, squareSize * board.size, i-1);
+        		g.drawLine(i-1, 0, i-1, squareSize * board.size);
+        	}
+        }
+        
+        /** draws numbers */
+        int b[][] = board.getBoard();
+        
+        for (int i = 0; i < board.size; i++) {
+        	for (int j = 0; j < board.size; j++) {
+        		g.drawString(Integer.toString(b[i][j]), (i * squareSize) + (squareSize / 2), (j * squareSize) + (squareSize / 2));
+        	}
+        }
     }
-
 }
