@@ -58,7 +58,7 @@ public class BoardPanel extends JPanel {
     public void setBoard(Board board) {
     	this.board = board;
     }
-    
+    /** for highlight method needs cordinates */
     int h[] = {-1, -1};
     public void highlight(int x, int y) {
     	h[0] = x;
@@ -86,16 +86,16 @@ public class BoardPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g); 
 
-        // determine the square size
+        /** square size */
         Dimension dim = getSize();
         squareSize = Math.min(dim.width, dim.height) / board.size;
 
-        // draw backround
+        /** background color */
         final Color oldColor = g.getColor();
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
         
-        //Highlights specific square
+        /** highlights square */
         if(h[0] != -1 && h[1] != -1) {
         	g.setColor(Color.MAGENTA);
         	g.fillRect(h[0]*squareSize, h[1]*squareSize, squareSize, squareSize);
@@ -103,7 +103,7 @@ public class BoardPanel extends JPanel {
         	h[1] = -1;
         }
 
-        // i.e., draw grid and squares.
+        /** draw squares */
         Color c = Color.black;
         g.setColor(c);
         int sqrt = (int) Math.sqrt(board.size);
@@ -124,7 +124,7 @@ public class BoardPanel extends JPanel {
         	}
         }
         
-        // draws numbers 
+        /** draws numbers */
         int b[][] = board.getBoard();
         
         for (int i = 0; i < board.size; i++) {
