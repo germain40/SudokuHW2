@@ -5,6 +5,9 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToolBar;
 
 import sudoku.model.Board;
 
@@ -48,6 +52,12 @@ public class SudokuDialog extends JFrame {
 
     /** Message bar to display various messages. */
     private JLabel msgBar = new JLabel("");
+    
+    /** Buttons for the ToolBar. */
+    JButton newGame, endGame, solveable;
+    
+    /** Buttons for bonus problems. */
+    JButton undo, redo, display;
 
     /** Create a new dialog. */
     public SudokuDialog() {
@@ -165,22 +175,33 @@ public class SudokuDialog extends JFrame {
 
     /** Configure the UI. */
     private void configureUI() {
-        setIconImage(createImageIcon("sudoku.png").getImage());
+    	setIconImage(createImageIcon("sudoku.png").getImage());
         setLayout(new BorderLayout());
+        
+    	JPanel center = new JPanel();
+        center.setLayout(new BorderLayout());
+        
+        JPanel toolBar = createToolBar();
+        toolBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
+        add(toolBar, BorderLayout.NORTH);
         
         JPanel buttons = makeControlPanel();
         // boarder: top, left, bottom, right
         buttons.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
-        add(buttons, BorderLayout.NORTH);
+        center.add(buttons, BorderLayout.NORTH);
         
         JPanel board = new JPanel();
         board.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
         board.setLayout(new GridLayout(1,1));
         board.add(boardPanel);
-        add(board, BorderLayout.CENTER);
+        center.add(board, BorderLayout.CENTER);
         
         msgBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
-        add(msgBar, BorderLayout.SOUTH);
+        center.add(msgBar, BorderLayout.SOUTH);
+        
+        add(center, BorderLayout.CENTER);
+        
+        setupListeners();
     }
       
     /** Create a control panel consisting of new and number buttons. */
@@ -217,6 +238,65 @@ public class SudokuDialog extends JFrame {
         content.add(numberButtons);
         return content;
     }
+    
+    /** Create toolbar consisting of new game, end game, and solveable buttons. */
+    private JPanel createToolBar() {
+    	JPanel panel = new JPanel();
+        JToolBar toolBar = new JToolBar();
+        toolBar.setFloatable(false);
+        panel.add(toolBar, BorderLayout.PAGE_START);
+    	
+		newGame = new JButton(createImageIcon("play.png"));
+		newGame.setToolTipText("Play new game");
+		toolBar.add(newGame);
+		
+		endGame = new JButton(createImageIcon("exit.png"));
+		endGame.setToolTipText("End current game");
+		toolBar.add(endGame);
+		
+		solveable = new JButton(createImageIcon("checkmark.png"));
+		solveable.setToolTipText("Checks if current board is solveable");
+		toolBar.add(solveable);
+		
+        return panel;
+    }
+    
+    private JPanel createMenu() {
+    	JPanel menu = new JPanel();
+    	
+    	return menu;
+    }
+    
+	private void setupListeners() {
+		endGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to close game?", "End Game?", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					System.exit(1);
+				}
+			}
+		});
+
+		newGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game?", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					board = new Board(9);
+		    		boardPanel.setBoard(board);
+		    		boardPanel.repaint();
+				}
+			}
+		});
+		
+		solveable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					
+				}
+			}
+		});
+	}
 
     /** Create an image icon from the given image file. */
     private ImageIcon createImageIcon(String filename) {

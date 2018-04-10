@@ -61,7 +61,7 @@ public class Board {
 		}
 		return b;
 	}
-	/** checks if boaard is solved */
+	/** checks if board is solved */
 	public boolean checkSolved() {
 		for (int i = 0; i < b.length; i++) {
 			for (int j = 0; j < b.length; j++) {
