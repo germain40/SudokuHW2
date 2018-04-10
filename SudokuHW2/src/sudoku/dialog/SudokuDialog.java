@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -23,9 +24,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 
 import sudoku.model.Board;
 
@@ -55,6 +60,9 @@ public class SudokuDialog extends JFrame {
     
     /** Buttons for the ToolBar. */
     JButton newGame, endGame, solveable;
+    
+    /** Menu items for dropdown menu. */
+    JMenuItem menuItem, menuItem2, menuItem3;
     
     /** Buttons for bonus problems. */
     JButton undo, redo, display;
@@ -181,9 +189,16 @@ public class SudokuDialog extends JFrame {
     	JPanel center = new JPanel();
         center.setLayout(new BorderLayout());
         
+        JPanel North = new JPanel();
+        North.setLayout(new BorderLayout());
+        
+        JPanel menu = createMenu();
+        menu.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+        add(menu, BorderLayout.NORTH);
+        
         JPanel toolBar = createToolBar();
-        toolBar.setBorder(BorderFactory.createEmptyBorder(10,16,10,0));
-        add(toolBar, BorderLayout.NORTH);
+        toolBar.setBorder(BorderFactory.createEmptyBorder(10,16,0,16));
+        North.add(toolBar, BorderLayout.NORTH);
         
         JPanel buttons = makeControlPanel();
         // boarder: top, left, bottom, right
@@ -200,6 +215,7 @@ public class SudokuDialog extends JFrame {
         center.add(msgBar, BorderLayout.SOUTH);
         
         add(center, BorderLayout.CENTER);
+        add(North, BorderLayout.NORTH);
         
         setupListeners();
     }
@@ -262,9 +278,36 @@ public class SudokuDialog extends JFrame {
     }
     
     private JPanel createMenu() {
-    	JPanel menu = new JPanel();
-    	
-    	return menu;
+    	JPanel menus = new JPanel();;
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu menu = new JMenu("Menu");
+		menu.setMnemonic(KeyEvent.VK_G);
+		menu.getAccessibleContext().setAccessibleDescription("Game menu");
+		menuBar.add(menu);
+		
+		menuItem = new JMenuItem("New Game", KeyEvent.VK_N);
+		menuItem.setIcon(createImageIcon("newGame.png"));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+		menuItem.getAccessibleContext().setAccessibleDescription("Play a new game");
+		//menuItem.addActionListener(e->{ int size = selectSize(); newClicked(size);});
+		
+		menuItem2 = new JMenuItem("Check Game", KeyEvent.VK_C);
+		menuItem2.setIcon(createImageIcon("checkGame.png"));
+		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		menuItem2.getAccessibleContext().setAccessibleDescription("Check if game is solveable");
+		
+		menuItem3 = new JMenuItem("Solve Game", KeyEvent.VK_S);
+		menuItem3.setIcon(createImageIcon("solveGame.png"));
+		menuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
+		menuItem3.getAccessibleContext().setAccessibleDescription("Solve game");
+		
+		menu.add(menuItem);
+		menu.add(menuItem2);
+		menu.add(menuItem3);
+		setJMenuBar(menuBar);
+		setVisible(true);
+		return menus;
     }
     
 	private void setupListeners() {
@@ -291,6 +334,35 @@ public class SudokuDialog extends JFrame {
 		solveable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					
+				}
+			}
+		});
+		
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game?", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					board = new Board(9);
+		    		boardPanel.setBoard(board);
+		    		boardPanel.repaint();
+				}
+			}
+		});
+		
+		menuItem2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					
+				}
+			}
+		});
+		
+		menuItem3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Solve the game?", "Scrub", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
 					
 				}
