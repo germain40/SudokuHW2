@@ -28,9 +28,9 @@ public class Board {
 			if (x >= 0 && x <= b.length) {
 				if (y >= 0 && y <= b.length) {
 					/** checks rules */
-					if (checkRow()) {
-						if (checkColum()) {
-							if (checkSub()) {
+					if (checkRow(x)) {
+						if (checkColum(y)) {
+							if (checkSub(x, y)) {
 								b[x][y] = n;
 								//System.out.println("Updated!");
 							}
@@ -42,7 +42,7 @@ public class Board {
 		return b;
 	}
 	
-	public boolean checkColumn() {
+	public boolean checkColumn(int y) {
 		for (int i = 0; i < b.length; i++) {
 			if (b[i][y] == n) {
 				System.out.println("Invalid Input... Number in same column");
@@ -51,7 +51,7 @@ public class Board {
 		}
 		return true;
 	}
-	public boolean checkRow() {
+	public boolean checkRow(int x) {
 		for (int i = 0; i < b.length; i++) {
 			if (b[x][i] == n) {
 				System.out.println("Invalid input... Number in same row");
@@ -61,7 +61,7 @@ public class Board {
 		return true;
 	}
 	
-	public boolean checkSub() {
+	public boolean checkSub(int x, int y) {
 		int sqrt = (int) Math.sqrt(b.length);
 		int subx = x / sqrt;
 		int suby = y / sqrt;
