@@ -1,8 +1,8 @@
-public class Solver {
+public class solve {
 	Board board;
 	int size;
 	
-	public Solver(Board b, int s){
+	public solve(Board b, int s){
 		board = b;
 		size = s;
 		
@@ -52,7 +52,7 @@ public class Solver {
 	public boolean isSolvable(){
 		Board tempBoard = new Board();
 		tempBoard.setBoardArray(board.getBoard());
-		Solver tempSolver = new Solver(tempBoard, tempBoard.getSize());
-		return tempSolver.solve();
+		solve tempsolve = new solve(tempBoard, tempBoard.getSize());
+		return tempsolve.solve();
 	}
 }
