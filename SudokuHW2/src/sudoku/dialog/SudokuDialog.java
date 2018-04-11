@@ -59,10 +59,10 @@ public class SudokuDialog extends JFrame {
     private JLabel msgBar = new JLabel("");
     
     /** Buttons for the ToolBar. */
-    JButton newGame, endGame, solveable;
+    JButton newGame, solveGame, checkSolve;
     
     /** Menu items for dropdown menu. */
-    JMenuItem menuItem, menuItem2, menuItem3;
+    JMenuItem menuItemNewGame, menuItemCheckSolve, menuItemSolve;
     
     /** Buttons for bonus problems. */
     JButton undo, redo, display;
@@ -266,13 +266,13 @@ public class SudokuDialog extends JFrame {
 		newGame.setToolTipText("Play new game");
 		toolBar.add(newGame);
 		
-		endGame = new JButton(createImageIcon("exit.png"));
-		endGame.setToolTipText("End current game");
-		toolBar.add(endGame);
+		checkSolve = new JButton(createImageIcon("checkmark.png"));
+		checkSolve.setToolTipText("Checks if current board is solveable");
+		toolBar.add(checkSolve);
 		
-		solveable = new JButton(createImageIcon("checkmark.png"));
-		solveable.setToolTipText("Checks if current board is solveable");
-		toolBar.add(solveable);
+		solveGame = new JButton(createImageIcon("solution.jpg"));
+		solveGame.setToolTipText("Solves the current game");
+		toolBar.add(solveGame);
 		
         return panel;
     }
@@ -286,84 +286,111 @@ public class SudokuDialog extends JFrame {
 		menu.getAccessibleContext().setAccessibleDescription("Game menu");
 		menuBar.add(menu);
 		
-		menuItem = new JMenuItem("New Game", KeyEvent.VK_N);
-		menuItem.setIcon(createImageIcon("newGame.png"));
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Play a new game");
-		//menuItem.addActionListener(e->{ int size = selectSize(); newClicked(size);});
+		menuItemNewGame = new JMenuItem("New Game", KeyEvent.VK_N);
+		menuItemNewGame.setIcon(createImageIcon("new_game.png"));
+		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+		menuItemNewGame.getAccessibleContext().setAccessibleDescription("Play a new game");
 		
-		menuItem2 = new JMenuItem("Check Game", KeyEvent.VK_C);
-		menuItem2.setIcon(createImageIcon("checkGame.png"));
-		menuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
-		menuItem2.getAccessibleContext().setAccessibleDescription("Check if game is solveable");
+		menuItemCheckSolve = new JMenuItem("Check Game", KeyEvent.VK_C);
+		menuItemCheckSolve.setIcon(createImageIcon("check.png"));
+		menuItemCheckSolve.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		menuItemCheckSolve.getAccessibleContext().setAccessibleDescription("Check if game is solveable");
 		
-		menuItem3 = new JMenuItem("Solve Game", KeyEvent.VK_S);
-		menuItem3.setIcon(createImageIcon("solveGame.png"));
-		menuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
-		menuItem3.getAccessibleContext().setAccessibleDescription("Solve game");
+		menuItemSolve = new JMenuItem("Solve Game", KeyEvent.VK_S);
+		menuItemSolve.setIcon(createImageIcon("solution.jpg"));
+		menuItemSolve.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
+		menuItemSolve.getAccessibleContext().setAccessibleDescription("Solve game");
 		
-		menu.add(menuItem);
-		menu.add(menuItem2);
-		menu.add(menuItem3);
+		menu.add(menuItemNewGame);
+		menu.add(menuItemCheckSolve);
+		menu.add(menuItemSolve);
 		setJMenuBar(menuBar);
 		setVisible(true);
 		return menus;
     }
     
 	private void setupListeners() {
-		endGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent click) {
-				int input = JOptionPane.showConfirmDialog(null, "Do you want to close game?", "End Game?", JOptionPane.YES_NO_OPTION);
-				if (input == JOptionPane.YES_OPTION) {
-					System.exit(1);
-				}
-			}
-		});
-
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
-				int input = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game?", JOptionPane.YES_NO_OPTION);
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
-					board = new Board(9);
-		    		boardPanel.setBoard(board);
-		    		boardPanel.repaint();
+					Object[] sizes = {"Quit",9,4};
+					int size = JOptionPane.showOptionDialog(null, "Select size: ", "New Game", 
+							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, sizes, null);
+					if(size == 2)  {
+						board = new Board(4);
+				        boardPanel.setBoard(board);
+				        boardPanel.repaint();
+					}
+					if(size == 1)  {
+						board = new Board(9);
+				        boardPanel.setBoard(board);
+				        boardPanel.repaint();
+					}
+					if(size == 0)
+						System.exit(0);
 				}
 			}
 		});
 		
-		solveable.addActionListener(new ActionListener() {
+		checkSolve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
+					showMessage("Is solvable");
 					
 				}
 			}
 		});
 		
-		menuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent click) {
-				int input = JOptionPane.showConfirmDialog(null, "Start a new game?", "New Game?", JOptionPane.YES_NO_OPTION);
-				if (input == JOptionPane.YES_OPTION) {
-					board = new Board(9);
-		    		boardPanel.setBoard(board);
-		    		boardPanel.repaint();
-				}
-			}
-		});
-		
-		menuItem2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent click) {
-				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
-				if (input == JOptionPane.YES_OPTION) {
-					
-				}
-			}
-		});
-		
-		menuItem3.addActionListener(new ActionListener() {
+		solveGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Solve the game?", "Scrub", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
+					showMessage("Solved");
+					
+				}
+			}
+		});
+		
+		menuItemNewGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					Object[] sizes = {"Quit",9,4};
+					int size = JOptionPane.showOptionDialog(null, "Select size: ", "New Game", 
+							JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, sizes, null);
+					if(size == 2)  {
+						board = new Board(4);
+				        boardPanel.setBoard(board);
+				        boardPanel.repaint();
+					}
+					if(size == 1)  {
+						board = new Board(9);
+				        boardPanel.setBoard(board);
+				        boardPanel.repaint();
+					}
+					if(size == 0)
+						System.exit(0);
+				}
+			}
+		});
+		
+		menuItemCheckSolve.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					showMessage("Is solvable");
+					
+				}
+			}
+		});
+		
+		menuItemSolve.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				int input = JOptionPane.showConfirmDialog(null, "Solve the game?", "Scrub", JOptionPane.YES_NO_OPTION);
+				if (input == JOptionPane.YES_OPTION) {
+					showMessage("Solved");
 					
 				}
 			}
