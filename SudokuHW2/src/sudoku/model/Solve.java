@@ -1,13 +1,15 @@
-public class solve {
+package sudoku.model;
+
+public class Solve {
 	Board board;
 	int size;
 	
-	public solve(Board b, int s){
+	public Solve(Board b, int s){
 		board = b;
 		size = s;
 		
 	}
-	//MISSING JAVADOC
+	
 	public boolean solve(){
 		return solve(0, 0);
 	}
@@ -28,31 +30,29 @@ public class solve {
 			yN = y;
 		}
 		
-
-		if(board.isSolved()) 	return true;
+		if(board.checkSolved()) 	return true;
 		else{
 			for (int i = 1; i <= size; ++i){
-				int[] ca = {x,y,i};
-				if (board.validCoordinates(ca)){
-					board.setCoordinates(ca);
+				int[] ca = {i,x,y};
+				if (board.checkValidCoordinates(i, x, y)){
+					board.setCoordinates(i, x, y);
 					if(solve(xN, yN)) return true;
 					else{
-						ca[0] = x;
-						ca[1] = y;
-						ca[2] = 0;
-						board.setCoordinates(ca);
+						ca[0] = 0;
+						ca[1] = x;
+						ca[2] = y;
+						board.setCoordinates(i, x, y);
 					}
 				}
-				
 			}
 		}
 		return false;
 		
 	}
 	public boolean isSolvable(){
-		Board tempBoard = new Board();
+		Board tempBoard = new Board(size);
 		tempBoard.setBoardArray(board.getBoard());
-		solve tempsolve = new solve(tempBoard, tempBoard.getSize());
+		Solve tempsolve = new Solve(tempBoard, tempBoard.size);
 		return tempsolve.solve();
 	}
 }
