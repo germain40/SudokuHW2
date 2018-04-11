@@ -33,6 +33,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 import sudoku.model.Board;
+import sudoku.model.Solve;
 
 /**
  * A dialog template for playing simple Sudoku games.
@@ -337,8 +338,11 @@ public class SudokuDialog extends JFrame {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
-					showMessage("Is solvable");
-					
+					Solve solver = new Solve(board, board.getSize());
+					if (solver.solve())
+						showMessage("Is solvable");
+					else 
+						showMessage("Not solvable");
 				}
 			}
 		});
@@ -380,8 +384,11 @@ public class SudokuDialog extends JFrame {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
-					showMessage("Is solvable");
-					
+					Solve solver = new Solve(board, board.getSize());
+					if (solver.solve())
+						showMessage("Is solvable");
+					else 
+						showMessage("Not solvable");
 				}
 			}
 		});
