@@ -69,8 +69,10 @@ public class Board {
 				if (y >= 0 && y <= b.length) {
 					/** checks rules */
 					if(checkValidCoordinates(n, x, y)) {
-						setCoordinates(n, x, y);
-						//System.out.println("Updated!");
+						if (br[x][y] == false) {
+							setCoordinates(n, x, y);
+							//System.out.println("Updated!");
+						}
 					}
 				}
 			}
