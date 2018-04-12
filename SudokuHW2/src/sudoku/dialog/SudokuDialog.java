@@ -339,7 +339,7 @@ public class SudokuDialog extends JFrame {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
 					Solve solver = new Solve(board, board.getSize());
-					if (solver.solve())
+					if (solver.isSolvable())
 						showMessage("Is solvable");
 					else 
 						showMessage("Not solvable");
@@ -351,8 +351,20 @@ public class SudokuDialog extends JFrame {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Solve the game?", "Scrub", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
-					showMessage("Solved");
-					
+					Solve solver = new Solve(board, board.getSize());
+					if (solver.isSolvable()) {
+						solver.solve();
+						boardPanel.repaint();
+						if (board.checkSolved()) {
+							int selectedOption = JOptionPane.showConfirmDialog(msgBar,
+									"Game is solved. Start new game?", "Solved!", JOptionPane.YES_NO_OPTION);
+							if (selectedOption == JOptionPane.YES_OPTION) {
+								newClicked(board.size);
+							}
+						}
+					}
+					else 
+						showMessage("Board can't be solved with current configuration");
 				}
 			}
 		});
@@ -385,7 +397,7 @@ public class SudokuDialog extends JFrame {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to check if the board is solveable?", "Solveable", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
 					Solve solver = new Solve(board, board.getSize());
-					if (solver.solve())
+					if (solver.isSolvable())
 						showMessage("Is solvable");
 					else 
 						showMessage("Not solvable");
@@ -397,8 +409,20 @@ public class SudokuDialog extends JFrame {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Solve the game?", "Scrub", JOptionPane.YES_NO_OPTION);
 				if (input == JOptionPane.YES_OPTION) {
-					showMessage("Solved");
-					
+					Solve solver = new Solve(board, board.getSize());
+					if (solver.isSolvable()) {
+						solver.solve();
+						boardPanel.repaint();
+						if (board.checkSolved()) {
+							int selectedOption = JOptionPane.showConfirmDialog(msgBar,
+									"Game is solved. Start new game?", "Solved!", JOptionPane.YES_NO_OPTION);
+							if (selectedOption == JOptionPane.YES_OPTION) {
+								newClicked(board.size);
+							}
+						}
+					}
+					else 
+						showMessage("Board can't be solved with current configuration");
 				}
 			}
 		});
