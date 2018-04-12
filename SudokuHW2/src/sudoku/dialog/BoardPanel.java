@@ -3,7 +3,6 @@ package sudoku.dialog;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -90,8 +89,6 @@ public class BoardPanel extends JPanel {
         Dimension dim = getSize();
         squareSize = Math.min(dim.width, dim.height) / board.size;
 
-        /** background color */
-        final Color oldColor = g.getColor();
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
         
