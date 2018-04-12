@@ -31,6 +31,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
@@ -62,13 +63,15 @@ public class SudokuDialog extends JFrame {
     private JLabel msgBar = new JLabel("");
     
     /** Buttons for the ToolBar. */
-    JButton newGame, solveGame, checkSolve;
+    JButton newGame, solveGame, checkSolve, giveHint;
     
     /** Menu items for dropdown menu. */
-    JMenuItem menuItemNewGame, menuItemCheckSolve, menuItemSolve;
+    JMenuItem menuItemNewGame, menuItemCheckSolve, menuItemSolve, menuItemGiveHint;
     
     /** Buttons for bonus problems. */
-    JButton undo, redo, display;
+    JButton undo, redo;
+    
+    private int toggle;
 
     /** Create a new dialog. */
     public SudokuDialog() {
@@ -99,7 +102,11 @@ public class SudokuDialog extends JFrame {
     	val[0] = x;
     	val[1] = y;
     	boardPanel.repaint();
-    	showMessage(String.format("Board clicked: x = %d, y = %d ,s = %s",  x, y, board.hint(x, y)));
+    	
+    	if(toggle == 1)
+    		showMessage(String.format("Board clicked: x = %d, y = %d , Possible numbers = %s",  x, y, board.hint(x, y)));
+    	else
+    		showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
     }
     
     /**
@@ -277,6 +284,10 @@ public class SudokuDialog extends JFrame {
 		solveGame.setToolTipText("Solves the current game");
 		toolBar.add(solveGame);
 		
+		giveHint = new JButton(createImageIcon("check.png"));
+		giveHint.setToolTipText("Enable/Disable Hint");
+		toolBar.add(giveHint);
+		
         return panel;
     }
     
@@ -295,7 +306,7 @@ public class SudokuDialog extends JFrame {
 		menuItemNewGame.getAccessibleContext().setAccessibleDescription("Play a new game");
 		
 		menuItemCheckSolve = new JMenuItem("Check Game", KeyEvent.VK_C);
-		menuItemCheckSolve.setIcon(createImageIcon("check.png"));
+		menuItemCheckSolve.setIcon(createImageIcon("checkmark.png"));
 		menuItemCheckSolve.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
 		menuItemCheckSolve.getAccessibleContext().setAccessibleDescription("Check if game is solveable");
 		
@@ -304,9 +315,15 @@ public class SudokuDialog extends JFrame {
 		menuItemSolve.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.ALT_MASK));
 		menuItemSolve.getAccessibleContext().setAccessibleDescription("Solve game");
 		
+		menuItemGiveHint = new JMenuItem("Enable/Disable Hints", KeyEvent.VK_H);
+		menuItemGiveHint.setIcon(createImageIcon("check.png"));
+		menuItemGiveHint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.ALT_MASK));
+		menuItemGiveHint.getAccessibleContext().setAccessibleDescription("Enable/Disable Hints");
+		
 		menu.add(menuItemNewGame);
 		menu.add(menuItemCheckSolve);
 		menu.add(menuItemSolve);
+		menu.add(menuItemGiveHint);
 		setJMenuBar(menuBar);
 		setVisible(true);
 		return menus;
@@ -371,6 +388,19 @@ public class SudokuDialog extends JFrame {
 			}
 		});
 		
+		giveHint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				Object[] a = {"Enable", "Disable"};
+				int input = JOptionPane.showOptionDialog(null, "Enable/Disable Hints?", "Hints", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, a, null);
+				if (input == JOptionPane.YES_OPTION)
+					toggle = 1;
+				else {
+					toggle = 0;
+				}
+			}
+		});
+		
 		menuItemNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
@@ -425,6 +455,19 @@ public class SudokuDialog extends JFrame {
 					}
 					else 
 						showMessage("Board can't be solved with current configuration");
+				}
+			}
+		});
+		
+		menuItemGiveHint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				Object[] a = {"Enable", "Disable"};
+				int input = JOptionPane.showOptionDialog(null, "Enable/Disable Hints?", "Hints", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, a, null);
+				if (input == JOptionPane.YES_OPTION)
+					toggle = 1;
+				else {
+					toggle = 0;
 				}
 			}
 		});
