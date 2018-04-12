@@ -37,7 +37,11 @@ public class Board {
     }
     public void partialFill() {
     	int counter = 0;
-    	while( counter != 17) {
+    	int pre;
+    	if (size == 9) {pre = 17;}
+    	else { pre = 3;}
+    	
+    	while( counter != pre) {
     		int n = (int) (Math.random() * size) + 1;
     		int x = (int) (Math.random() * size) + 1;
     		int y = (int) (Math.random() * size) + 1;
