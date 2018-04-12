@@ -12,8 +12,7 @@ public class Board {
 
     /** Create a new board of the given size. */
     public Board(int size) {
-    	Solve solver = new Solve(Board.this, size);
-        this.size = size;
+    	this.size = size;
         b = new int[size][size];
         br = new boolean[size][size];
         partialFill();
