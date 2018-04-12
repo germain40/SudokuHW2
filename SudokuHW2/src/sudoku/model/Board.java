@@ -1,5 +1,7 @@
 package sudoku.model;
 
+import java.util.ArrayList;
+
 /** An abstraction of Sudoku puzzle. */
 public class Board {
 
@@ -24,6 +26,15 @@ public class Board {
     	return size;
     }
     
+    public ArrayList<Integer> hint(int x, int y) {
+    	ArrayList<Integer> hint = new ArrayList<Integer>();
+    	for (int n = 1; n <= size; n++) {
+    		if (checkValidCoordinates(n, x, y)) {
+    			hint.add(n);
+    		}
+    	}
+    	return hint;
+    }
     public void partialFill() {
     	int counter = 0;
     	while( counter != 17) {
