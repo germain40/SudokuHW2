@@ -95,6 +95,17 @@ public class BoardPanel extends JPanel {
         g.setColor(boardColor);
         g.fillRect(0, 0, squareSize * board.size, squareSize * board.size);
         
+        /** color pre-filled numbers */
+        boolean[][] pre = board.getBr();
+        for (int i = 0; i < board.size; i++) {
+        	for (int j = 0; j < board.size; j++) {
+        		if (pre[i][j]) {
+        			g.setColor(Color.CYAN);
+        			g.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+        		}
+        	}
+        }
+        
         /** highlights square */
         if(h[0] != -1 && h[1] != -1) {
         	g.setColor(Color.MAGENTA);
