@@ -6,12 +6,15 @@ public class Board {
     /** Size of this board (number of columns/rows). */
     public final int size;
 	private int[][] b;
+	private boolean[][] br;
 
     /** Create a new board of the given size. */
     public Board(int size) {
     	Solve solver = new Solve(Board.this, size);
         this.size = size;
         b = new int[size][size];
+        br = new boolean[size][size];
+        partialFill();
         
        //solver.solve();
     }
@@ -20,6 +23,29 @@ public class Board {
     public int size() {
     	return size;
     }
+    
+    public void partialFill() {
+    	int counter = 0;
+    	while( counter != 17) {
+    		int n = (int) (Math.random() * size) + 1;
+    		int x = (int) (Math.random() * size) + 1;
+    		int y = (int) (Math.random() * size) + 1;
+    		for (; x < size; x++) {
+    			for (; y < size; y++) {
+    				if (b[x][y] == 0) {
+    					if (br[x][y] != true) {
+    						if (checkValidCoordinates(n, x, y)) {
+    							setCoordinates(n, x, y);
+        						br[x][y] = true;
+        						counter++;
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    }
+    
 	/** updates board and checks valid entry */
 	public int[][] checkBoard(int n, int x, int y) {
 		if (n == 0) {
@@ -99,6 +125,10 @@ public class Board {
 	
 	public int[][] getBoard() {
 		return b;
+	}
+	
+	public boolean[][] getBr() {
+		return br;
 	}
 	
 	public int getSize() {
