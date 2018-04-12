@@ -12,6 +12,8 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -97,7 +99,7 @@ public class SudokuDialog extends JFrame {
     	val[0] = x;
     	val[1] = y;
     	boardPanel.repaint();
-    	showMessage(String.format("Board clicked: x = %d, y = %d",  x, y));
+    	showMessage(String.format("Board clicked: x = %d, y = %d ,s = %s",  x, y, board.hint(x, y)));
     }
     
     /**
