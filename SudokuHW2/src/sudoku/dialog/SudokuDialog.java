@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
+import sudoku.model.DoublyLinkedList;
 import sudoku.model.Board;
 import sudoku.model.Solve;
 
@@ -54,16 +55,17 @@ public class SudokuDialog extends JFrame {
     /** Message bar to display various messages. */
     private JLabel msgBar = new JLabel("");
     
-    /** Buttons for the ToolBar. */
-    JButton newGame, solveGame, checkSolve, giveHint;
+    /** Buttons for the ToolBar and bonus problems. */
+    JButton newGame, solveGame, checkSolve, giveHint, undo, redo;
     
-    /** Menu items for dropdown menu. */
-    JMenuItem menuItemNewGame, menuItemCheckSolve, menuItemSolve, menuItemGiveHint;
+    /** Menu items for dropdown menu and bonus problems. */
+    JMenuItem menuItemNewGame, menuItemCheckSolve, menuItemSolve, menuItemGiveHint, menuItemUndo, menuItemRedo;
     
-    /** Buttons for bonus problems. */
-    JButton undo, redo;
     
+    /** Used to display hints. */
     private int toggle;
+    
+    DoublyLinkedList list = new DoublyLinkedList();
 
     /** Create a new dialog. */
     public SudokuDialog() {
@@ -81,6 +83,7 @@ public class SudokuDialog extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         //setResizable(false);
+        list.add(board);
     }
 
     /**
@@ -111,6 +114,7 @@ public class SudokuDialog extends JFrame {
     		board.checkBoard(val[2], val[0], val[1]);
             val[0] = -1;
             val[1] = -1;
+            list.add(board);
             boardPanel.repaint();
         	showMessage("Number clicked: " + number);
     	}
@@ -280,6 +284,14 @@ public class SudokuDialog extends JFrame {
 		giveHint.setToolTipText("Enable/Disable Hint");
 		toolBar.add(giveHint);
 		
+		undo = new JButton(createImageIcon("undo-button.png"));
+		undo.setToolTipText("Undos last action");
+		toolBar.add(undo);
+		
+		redo = new JButton(createImageIcon("redo-circular-arrow.png"));
+		redo.setToolTipText("Redos last action");
+		toolBar.add(redo);
+		
         return panel;
     }
     
@@ -312,10 +324,22 @@ public class SudokuDialog extends JFrame {
 		menuItemGiveHint.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.ALT_MASK));
 		menuItemGiveHint.getAccessibleContext().setAccessibleDescription("Enable/Disable Hints");
 		
+		menuItemUndo = new JMenuItem("Undo action", KeyEvent.VK_U);
+		menuItemUndo.setIcon(createImageIcon("undo-button.png"));
+		menuItemUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, ActionEvent.ALT_MASK));
+		menuItemUndo.getAccessibleContext().setAccessibleDescription("Undo action");
+		
+		menuItemRedo = new JMenuItem("Redo action", KeyEvent.VK_R);
+		menuItemRedo.setIcon(createImageIcon("redo-circular-arrow.png"));
+		menuItemRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
+		menuItemRedo.getAccessibleContext().setAccessibleDescription("Redo action");
+		
 		menu.add(menuItemNewGame);
 		menu.add(menuItemCheckSolve);
 		menu.add(menuItemSolve);
 		menu.add(menuItemGiveHint);
+		menu.add(menuItemUndo);
+		menu.add(menuItemRedo);
 		setJMenuBar(menuBar);
 		setVisible(true);
 		return menus;
@@ -393,6 +417,22 @@ public class SudokuDialog extends JFrame {
 			}
 		});
 		
+		undo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				boardPanel.setBoard(list.undo());
+				boardPanel.repaint();
+				showMessage("Action undone");
+			}
+		});
+		
+		redo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				boardPanel.setBoard(list.redo());
+				boardPanel.repaint();
+				showMessage("Action redone");
+			}
+		});
+		
 		menuItemNewGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
 				int input = JOptionPane.showConfirmDialog(null, "Do you want to start a new game?", "New Game", JOptionPane.YES_NO_OPTION);
@@ -461,6 +501,22 @@ public class SudokuDialog extends JFrame {
 				else {
 					toggle = 0;
 				}
+			}
+		});
+		
+		menuItemUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				boardPanel.setBoard(list.undo());
+				boardPanel.repaint();
+				showMessage("Action undone");
+			}
+		});
+		
+		menuItemRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent click) {
+				boardPanel.setBoard(list.redo());
+				boardPanel.repaint();
+				showMessage("Action redone");
 			}
 		});
 	}
