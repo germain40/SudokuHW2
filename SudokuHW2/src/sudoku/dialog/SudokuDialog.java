@@ -61,11 +61,8 @@ public class SudokuDialog extends JFrame {
     /** Menu items for dropdown menu and bonus problems. */
     JMenuItem menuItemNewGame, menuItemCheckSolve, menuItemSolve, menuItemGiveHint, menuItemUndo, menuItemRedo;
     
-    
     /** Used to display hints. */
     private int toggle;
-    
-    DoublyLinkedList list = new DoublyLinkedList();
 
     /** Create a new dialog. */
     public SudokuDialog() {
@@ -83,7 +80,6 @@ public class SudokuDialog extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
         //setResizable(false);
-        list.add(board);
     }
 
     /**
@@ -114,7 +110,6 @@ public class SudokuDialog extends JFrame {
     		board.checkBoard(val[2], val[0], val[1]);
             val[0] = -1;
             val[1] = -1;
-            list.add(board);
             boardPanel.repaint();
         	showMessage("Number clicked: " + number);
     	}
@@ -419,16 +414,16 @@ public class SudokuDialog extends JFrame {
 		
 		undo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
-				boardPanel.setBoard(list.undo());
-				boardPanel.repaint();
+				board.undo();
+				repaint();
 				showMessage("Action undone");
 			}
 		});
 		
 		redo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
-				boardPanel.setBoard(list.redo());
-				boardPanel.repaint();
+				board.redo();
+				repaint();
 				showMessage("Action redone");
 			}
 		});
@@ -506,7 +501,7 @@ public class SudokuDialog extends JFrame {
 		
 		menuItemUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
-				boardPanel.setBoard(list.undo());
+				//boardPanel.setBoard(list.undo());
 				boardPanel.repaint();
 				showMessage("Action undone");
 			}
@@ -514,7 +509,7 @@ public class SudokuDialog extends JFrame {
 		
 		menuItemRedo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent click) {
-				boardPanel.setBoard(list.redo());
+				//boardPanel.setBoard(list.redo());
 				boardPanel.repaint();
 				showMessage("Action redone");
 			}
