@@ -9,14 +9,20 @@ public class Board {
     public final int size;
 	private int[][] b;
 	private boolean[][] br;
+	
+	/** Linked list used for undo/redo. */
+	DoublyLinkedList list = new DoublyLinkedList();
+	
+	boolean start;
 
     /** Create a new board of the given size. */
     public Board(int size) {
+    	start = true;
     	this.size = size;
         b = new int[size][size];
         br = new boolean[size][size];
         partialFill();
-        
+        start = false;
        //solver.solve();
     }
 
@@ -34,6 +40,8 @@ public class Board {
     	}
     	return hint;
     }
+    
+    /** Partially fills in the starting board. */
     public void partialFill() {
     	int counter = 0;
     	int pre;
@@ -74,6 +82,10 @@ public class Board {
 					if(checkValidCoordinates(n, x, y)) {
 						if (br[x][y] == false) {
 							setCoordinates(n, x, y);
+							if(!start) {
+								list.add(x, y, n);
+								System.out.println("x==" + list.x + " y==" + list.y +" added" + list.n);
+							}
 							//System.out.println("Updated!");
 						}
 					}
@@ -83,6 +95,7 @@ public class Board {
 		return b;
 	}
 	
+	/** Checks if coordinates are valid. */
 	public boolean checkValidCoordinates(int n, int x, int y) {
 		for (int i = 0; i < b.length; i++) {
 			if (b[i][y] == n) {
@@ -118,7 +131,9 @@ public class Board {
 		return true;
 	}
 	
+	/** Sets the new coordinates of the board. */
 	public void setCoordinates(int n, int x, int y) {
+		
 		b[x][y] = n;
 	}
 	
@@ -131,6 +146,18 @@ public class Board {
 			}
 		}
 		return true;
+	}
+	
+	/** Undo previous action. */
+	public void undo() {
+		list.undo();
+		setCoordinates(list.n, list.x, list.y);
+	}
+	
+	/** Redo previous action. */
+	public void redo() {
+		list.redo();
+		setCoordinates(list.n, list.x, list.y);
 	}
 	
 	public void setBoardArray(int[][] a) {
