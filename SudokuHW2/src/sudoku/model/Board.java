@@ -9,6 +9,7 @@ public class Board {
     public final int size;
 	private int[][] b;
 	private boolean[][] br;
+	private int toggle;
 	
 	/** Linked list used for undo/redo. */
 	DoublyLinkedList list = new DoublyLinkedList();
@@ -22,6 +23,7 @@ public class Board {
         b = new int[size][size];
         br = new boolean[size][size];
         partialFill();
+	 toggle = 0;
         start = false;
        //solver.solve();
     }
@@ -176,5 +178,11 @@ public class Board {
 	
 	public int getSize() {
 		return size;
+	}
+	public void setToggle(int i) {
+		this.toggle = i;
+	}
+	public boolean isHint() {
+		return toggle == 1;
 	}
 }
