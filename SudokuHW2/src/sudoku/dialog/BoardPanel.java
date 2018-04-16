@@ -2,6 +2,7 @@ package sudoku.dialog;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -85,6 +86,8 @@ public class BoardPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g); 
 
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+        
         /** square size */
         Dimension dim = getSize();
         squareSize = Math.min(dim.width, dim.height) / board.size;
@@ -109,6 +112,44 @@ public class BoardPanel extends JPanel {
         	g.fillRect(h[0]*squareSize, h[1]*squareSize, squareSize, squareSize);
         	h[0] = -1;
         	h[1] = -1;
+        }
+        
+        if (board.isHint()) {
+        	 g.setFont(new Font("TimesRoman", Font.PLAIN, 4));
+        	 g.setColor(Color.BLACK);
+        	 int[] dist = new int[4];
+        	 if(board.size == 9){
+     			dist[0] = 9; //how far apart x
+     			dist[1] = 6; //starting x
+     			dist[2] = 12; //starting y
+     			dist[3] = 9; // how far apart y
+     		}
+     		else if(board.size == 4){
+     			dist[0] = 34; //how far apart x
+     			dist[1] = 20; //starting x
+     			dist[2] = 26; //starting y
+     			dist[3] = 34; // how far apart y
+     		}
+        	int[][] b = board.getBoard();
+        	for (int i = 0; i < board.size; i++) {
+            	for (int j = 0; j < board.size; j++) {
+    				if (b[i][j] != 0)
+    					g.drawString(Integer.toString(b[i][j]), (i * squareSize) + (squareSize / 2), (j * squareSize) + (squareSize / 2));
+    				else {
+    					int x = i;
+    					int y = j;
+    					for(int k = 0; k < (int) Math.sqrt(b.length); ++k){
+							for(int m = 0; m < (int) Math.sqrt(b.length); ++m){
+								int n = m * (int) Math.sqrt(b.length) + (k+1);
+								if(board.checkValidCoordinates(n, x, y))
+									g.drawString(Integer.toString(n),(squareSize)*(j) + (k * dist[0]) + dist[1] ,(squareSize)*(i) + dist[2] +  (m * dist[3]));
+							}
+							
+						}
+    					g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+    				}
+            	}
+            }
         }
 
         /** draw squares */
@@ -137,6 +178,7 @@ public class BoardPanel extends JPanel {
         
         for (int i = 0; i < board.size; i++) {
         	for (int j = 0; j < board.size; j++) {
+        		if (b[i][j] != 0)
         		g.drawString(Integer.toString(b[i][j]), (i * squareSize) + (squareSize / 2), (j * squareSize) + (squareSize / 2));
         	}
         }
