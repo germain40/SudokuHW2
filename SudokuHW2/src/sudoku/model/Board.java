@@ -2,6 +2,8 @@ package sudoku.model;
 
 import java.util.ArrayList;
 
+import sudoku.model.DoublyLinkedList;
+
 /** An abstraction of Sudoku puzzle. */
 public class Board {
 
@@ -9,12 +11,14 @@ public class Board {
     public final int size;
 	private int[][] b;
 	private boolean[][] br;
-	private int toggle;
 	
 	/** Linked list used for undo/redo. */
-	DoublyLinkedList list = new DoublyLinkedList();
+	DoublyLinkedList head = null;
+	DoublyLinkedList current = null;
+	DoublyLinkedList tail = null;
 	
 	boolean start;
+	int toggle = 0;
 
     /** Create a new board of the given size. */
     public Board(int size) {
@@ -23,7 +27,6 @@ public class Board {
         b = new int[size][size];
         br = new boolean[size][size];
         partialFill();
-	 toggle = 0;
         start = false;
        //solver.solve();
     }
@@ -84,10 +87,6 @@ public class Board {
 					if(checkValidCoordinates(n, x, y)) {
 						if (br[x][y] == false) {
 							setCoordinates(n, x, y);
-							if(!start) {
-								list.add(x, y, n);
-								System.out.println("x==" + list.x + " y==" + list.y +" added" + list.n);
-							}
 							//System.out.println("Updated!");
 						}
 					}
@@ -135,7 +134,10 @@ public class Board {
 	
 	/** Sets the new coordinates of the board. */
 	public void setCoordinates(int n, int x, int y) {
-		
+		if(!start) {
+			add(x, y, b[x][y], n);
+			//System.out.println("x==" + current.x + " y==" + current.y +" added" + current.n);
+		}
 		b[x][y] = n;
 	}
 	
@@ -150,16 +152,29 @@ public class Board {
 		return true;
 	}
 	
+	public void add(int x, int y, int n, int n2) { 
+        DoublyLinkedList tmp = new DoublyLinkedList(x, y, n, n2, null, current);
+        if(current != null) {current.next = tmp;}
+        tail = tmp;
+        current = tmp;
+        if(head == null) { head = tmp;}
+    }
+	
 	/** Undo previous action. */
 	public void undo() {
-		list.undo();
-		setCoordinates(list.n, list.x, list.y);
+		b[current.x][current.y] = current.n;
+		if(current.prev != null){
+            current = current.prev;
+        }
 	}
 	
 	/** Redo previous action. */
 	public void redo() {
-		list.redo();
-		setCoordinates(list.n, list.x, list.y);
+		b[current.x][current.y] = current.n2;
+		if (current.next != null) {
+			current = current.next;
+		}
+
 	}
 	
 	public void setBoardArray(int[][] a) {
@@ -179,9 +194,11 @@ public class Board {
 	public int getSize() {
 		return size;
 	}
+	
 	public void setToggle(int i) {
 		this.toggle = i;
 	}
+	
 	public boolean isHint() {
 		return toggle == 1;
 	}
