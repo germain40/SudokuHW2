@@ -40,6 +40,9 @@ public class BoardPanel extends JPanel {
 
     /** Width and height of a square in pixels. */
     private int squareSize;
+    
+    /** Used for hint display. */
+    private boolean start;
 
     /** Create a new board panel to display the given board. */
     public BoardPanel(Board board, ClickListener listener) {
@@ -115,7 +118,6 @@ public class BoardPanel extends JPanel {
         }
         
         if (board.isHint()) {
-        	 g.setFont(new Font("TimesRoman", Font.PLAIN, 4));
         	 g.setColor(Color.BLACK);
         	 int[] dist = new int[4];
         	 if(board.size == 9){
@@ -133,20 +135,24 @@ public class BoardPanel extends JPanel {
         	int[][] b = board.getBoard();
         	for (int i = 0; i < board.size; i++) {
             	for (int j = 0; j < board.size; j++) {
-    				if (b[i][j] != 0)
+    				if (b[i][j] != 0) {
     					g.drawString(Integer.toString(b[i][j]), (i * squareSize) + (squareSize / 2), (j * squareSize) + (squareSize / 2));
+    					g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+    				}
     				else {
     					int x = i;
     					int y = j;
-    					for(int k = 0; k < (int) Math.sqrt(b.length); ++k){
-							for(int m = 0; m < (int) Math.sqrt(b.length); ++m){
-								int n = m * (int) Math.sqrt(b.length) + (k+1);
-								if(board.checkValidCoordinates(n, x, y))
-									g.drawString(Integer.toString(n),(squareSize)*(j) + (k * dist[0]) + dist[1] ,(squareSize)*(i) + dist[2] +  (m * dist[3]));
+    					if(b[y][x] == 0) {
+							for (int k = 0; k < (int) Math.sqrt(b.length); k++) {
+								for (int m = 0; m < (int) Math.sqrt(b.length); m++) {
+									int n = m * (int) Math.sqrt(b.length) + (k + 1);
+									if (board.checkValidCoordinates(n, y, x))
+										g.drawString(Integer.toString(n), (squareSize) * (j) + (k * dist[0]) + dist[1],
+												(squareSize) * (i) + dist[2] + (m * dist[3]));
+								}
 							}
-							
-						}
-    					g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+							g.setFont(new Font("TimesRoman", Font.PLAIN, 10));
+    					}
     				}
             	}
             }
