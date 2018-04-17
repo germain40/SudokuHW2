@@ -404,10 +404,15 @@ public class SudokuDialog extends JFrame {
 				Object[] a = {"Enable", "Disable"};
 				int input = JOptionPane.showOptionDialog(null, "Enable/Disable Hints?", "Hints", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, a, null);
-				if (input == JOptionPane.YES_OPTION)
+				if (input == JOptionPane.YES_OPTION) {
 					toggle = 1;
+					board.setToggle(1);
+					repaint();
+				}
 				else {
 					toggle = 0;
+					board.setToggle(0);
+					repaint();
 				}
 			}
 		});
